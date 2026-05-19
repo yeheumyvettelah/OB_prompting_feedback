@@ -8,25 +8,25 @@
 <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=DM+Mono:wght@400;500&family=Geist:wght@300;400;500;600&display=swap" rel="stylesheet">
 <style>
   :root {
-    --bg: #0F0E0C;
-    --surface: #171614;
-    --surface2: #1F1D1A;
-    --border: #2A2724;
-    --border2: #333028;
-    --text: #E8E4DC;
-    --text-muted: #7A7468;
-    --text-dim: #4A4640;
-    --accent: #D4863A;
-    --accent-dim: #2A1E0F;
-    --accent-mid: #8A5520;
-    --green: #4CAF7D;
-    --green-dim: #0F2018;
-    --red: #E05252;
-    --red-dim: #200F0F;
+    --bg: #FFFFFF;
+    --surface: #F4F8F7;
+    --surface2: #E8F2EF;
+    --border: #D0E5DF;
+    --border2: #B8D5CC;
+    --text: #0D1F1A;
+    --text-muted: #4A7A6A;
+    --text-dim: #9DBFB5;
+    --accent: #00664F;
+    --accent-dim: #E6F2EE;
+    --accent-mid: #004F3C;
+    --accent-hover: #005542;
+    --green: #00664F;
+    --green-dim: #E6F2EE;
+    --red: #C0392B;
+    --red-dim: #FDECEA;
   }
 
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
   html { scroll-behavior: smooth; }
 
   body {
@@ -39,29 +39,17 @@
     -webkit-font-smoothing: antialiased;
   }
 
-  /* ── GRAIN OVERLAY ── */
-  body::before {
-    content: '';
-    position: fixed;
-    inset: 0;
-    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
-    pointer-events: none;
-    z-index: 0;
-    opacity: 0.6;
-  }
-
   .wrap {
-    position: relative;
-    z-index: 1;
     max-width: 720px;
     margin: 0 auto;
     padding: 64px 24px 120px;
   }
 
-  /* ── HEADER ── */
   .header {
-    margin-bottom: 56px;
+    margin-bottom: 52px;
     animation: fadeUp 0.6s ease both;
+    padding-bottom: 40px;
+    border-bottom: 2px solid var(--accent);
   }
 
   .eyebrow {
@@ -80,9 +68,8 @@
     content: '';
     display: block;
     width: 24px;
-    height: 1px;
+    height: 2px;
     background: var(--accent);
-    opacity: 0.6;
   }
 
   h1 {
@@ -94,10 +81,7 @@
     margin-bottom: 14px;
   }
 
-  h1 em {
-    font-style: italic;
-    color: var(--accent);
-  }
+  h1 em { font-style: italic; color: var(--accent); }
 
   .header-sub {
     color: var(--text-muted);
@@ -107,12 +91,10 @@
     line-height: 1.7;
   }
 
-  /* ── STEPS BAR ── */
   .steps-bar {
     display: flex;
-    gap: 0;
     margin-bottom: 40px;
-    border: 1px solid var(--border);
+    border: 1.5px solid var(--border);
     border-radius: 10px;
     overflow: hidden;
     animation: fadeUp 0.6s 0.1s ease both;
@@ -120,27 +102,26 @@
 
   .step-item {
     flex: 1;
-    padding: 14px 16px;
+    padding: 13px 16px;
     display: flex;
     align-items: center;
     gap: 10px;
     font-size: 12px;
     color: var(--text-dim);
-    border-right: 1px solid var(--border);
-    transition: color 0.3s;
+    border-right: 1.5px solid var(--border);
+    transition: color 0.3s, background 0.3s;
     background: var(--surface);
   }
 
   .step-item:last-child { border-right: none; }
-
-  .step-item.active { color: var(--text); background: var(--surface2); }
-  .step-item.done { color: var(--green); }
+  .step-item.active { color: var(--accent); background: var(--accent-dim); }
+  .step-item.done { color: var(--accent); background: var(--accent-dim); }
 
   .step-num {
     width: 20px;
     height: 20px;
     border-radius: 50%;
-    border: 1px solid currentColor;
+    border: 1.5px solid currentColor;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -151,14 +132,13 @@
   }
 
   .step-item.done .step-num {
-    background: var(--green);
-    border-color: var(--green);
-    color: #000;
+    background: var(--accent);
+    border-color: var(--accent);
+    color: #fff;
   }
 
   .step-label { font-weight: 500; }
 
-  /* ── SECTION ── */
   .section {
     margin-bottom: 32px;
     animation: fadeUp 0.6s 0.15s ease both;
@@ -173,16 +153,13 @@
     margin-bottom: 10px;
   }
 
-  /* ── TEXTAREA ── */
-  .textarea-wrap {
-    position: relative;
-  }
+  .textarea-wrap { position: relative; }
 
   textarea {
     width: 100%;
     min-height: 280px;
     background: var(--surface);
-    border: 1px solid var(--border);
+    border: 1.5px solid var(--border);
     border-radius: 10px;
     color: var(--text);
     font-family: 'Geist', sans-serif;
@@ -197,8 +174,8 @@
   textarea::placeholder { color: var(--text-dim); }
 
   textarea:focus {
-    border-color: var(--accent-mid);
-    box-shadow: 0 0 0 3px rgba(212, 134, 58, 0.08);
+    border-color: var(--accent);
+    box-shadow: 0 0 0 3px rgba(0, 102, 79, 0.1);
   }
 
   .char-count {
@@ -211,13 +188,7 @@
     pointer-events: none;
   }
 
-  /* ── INFO STRIP ── */
-  .info-strip {
-    display: flex;
-    gap: 8px;
-    flex-wrap: wrap;
-    margin-top: 10px;
-  }
+  .info-strip { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 10px; }
 
   .info-pill {
     font-size: 11.5px;
@@ -231,9 +202,8 @@
     gap: 5px;
   }
 
-  .info-pill svg { opacity: 0.5; }
+  .info-pill svg { opacity: 0.6; }
 
-  /* ── SUBMIT BUTTON ── */
   .btn-wrap {
     margin-top: 24px;
     animation: fadeUp 0.6s 0.2s ease both;
@@ -243,14 +213,14 @@
     width: 100%;
     padding: 16px 24px;
     background: var(--accent);
-    color: #0F0E0C;
+    color: #fff;
     border: none;
     border-radius: 10px;
     font-family: 'Geist', sans-serif;
     font-size: 15px;
     font-weight: 600;
     cursor: pointer;
-    transition: opacity 0.2s, transform 0.15s;
+    transition: background 0.2s, transform 0.15s;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -259,36 +229,26 @@
   }
 
   button[type="submit"]:hover:not(:disabled) {
-    opacity: 0.9;
+    background: var(--accent-hover);
     transform: translateY(-1px);
   }
 
-  button[type="submit"]:disabled {
-    opacity: 0.4;
-    cursor: not-allowed;
-    transform: none;
-  }
+  button[type="submit"]:disabled { opacity: 0.35; cursor: not-allowed; }
 
   .spinner {
     width: 16px;
     height: 16px;
-    border: 2px solid rgba(0,0,0,0.2);
-    border-top-color: #000;
+    border: 2px solid rgba(255,255,255,0.3);
+    border-top-color: #fff;
     border-radius: 50%;
     animation: spin 0.7s linear infinite;
     display: none;
   }
 
   button[type="submit"].loading .spinner { display: block; }
-  button[type="submit"].loading .btn-text { opacity: 0.7; }
+  button[type="submit"].loading .btn-text { opacity: 0.8; }
 
-  /* ── RESULT ── */
-  #result {
-    margin-top: 40px;
-    display: none;
-    animation: fadeUp 0.5s ease both;
-  }
-
+  #result { margin-top: 40px; display: none; animation: fadeUp 0.5s ease both; }
   #result.visible { display: block; }
 
   .result-header {
@@ -304,11 +264,7 @@
     color: var(--text);
   }
 
-  .score-badge {
-    display: flex;
-    align-items: baseline;
-    gap: 3px;
-  }
+  .score-badge { display: flex; align-items: baseline; gap: 3px; }
 
   .score-num {
     font-family: 'Instrument Serif', serif;
@@ -325,7 +281,7 @@
 
   .result-card {
     background: var(--surface);
-    border: 1px solid var(--border);
+    border: 1.5px solid var(--border);
     border-radius: 12px;
     overflow: hidden;
   }
@@ -342,14 +298,14 @@
     font-size: 10px;
     letter-spacing: 0.14em;
     text-transform: uppercase;
+    color: var(--text-muted);
     margin-bottom: 10px;
     display: flex;
     align-items: center;
     gap: 8px;
   }
 
-  .result-block-label.why { color: var(--text-muted); }
-  .result-block-label.next { color: var(--green); }
+  .result-block-label.next { color: var(--accent); }
 
   .dot {
     width: 6px;
@@ -359,16 +315,11 @@
     flex-shrink: 0;
   }
 
-  .result-block p {
-    font-size: 14.5px;
-    line-height: 1.75;
-    color: var(--text);
-  }
+  .result-block p { font-size: 14.5px; line-height: 1.75; color: var(--text); }
 
-  /* ── ERROR ── */
   .error-box {
     background: var(--red-dim);
-    border: 1px solid var(--red);
+    border: 1px solid #e0a0a0;
     border-radius: 10px;
     padding: 16px 20px;
     font-size: 13.5px;
@@ -379,17 +330,9 @@
 
   .error-box.visible { display: block; }
 
-  /* ── DIVIDER ── */
-  .divider {
-    border: none;
-    border-top: 1px solid var(--border);
-    margin: 40px 0;
-  }
+  .divider { border: none; border-top: 1.5px solid var(--border); margin: 40px 0; }
 
-  /* ── SCORE TABLE ── */
-  .score-ref {
-    animation: fadeUp 0.6s 0.25s ease both;
-  }
+  .score-ref { animation: fadeUp 0.6s 0.25s ease both; }
 
   .score-ref-title {
     font-family: 'DM Mono', monospace;
@@ -404,7 +347,7 @@
     display: grid;
     gap: 1px;
     background: var(--border);
-    border: 1px solid var(--border);
+    border: 1.5px solid var(--border);
     border-radius: 10px;
     overflow: hidden;
   }
@@ -412,13 +355,12 @@
   .score-row {
     display: grid;
     grid-template-columns: 72px 1fr 80px;
-    background: var(--surface);
+    background: var(--bg);
     transition: background 0.15s;
   }
 
-  .score-row:hover { background: var(--surface2); }
-
-  .score-row.header { background: var(--surface2); }
+  .score-row:hover { background: var(--surface); }
+  .score-row.header { background: var(--accent); }
 
   .score-cell {
     padding: 10px 14px;
@@ -435,7 +377,8 @@
     font-size: 10px;
     letter-spacing: 0.1em;
     text-transform: uppercase;
-    color: var(--text-dim);
+    color: rgba(255,255,255,0.85);
+    border-right-color: rgba(255,255,255,0.15);
   }
 
   .score-val {
@@ -452,15 +395,14 @@
     letter-spacing: 0.06em;
   }
 
-  .grade-b { background: #0F1E2A; color: #4A9ECC; }
+  .grade-b { background: #E8F0FA; color: #2A5FA0; }
   .grade-a { background: var(--green-dim); color: var(--green); }
-  .grade-x { background: #1A1206; color: var(--accent); }
+  .grade-x { background: #FFF3E0; color: #B8600A; }
 
-  /* ── RESET BUTTON ── */
   .reset-btn {
     margin-top: 20px;
     background: transparent;
-    border: 1px solid var(--border2);
+    border: 1.5px solid var(--border);
     color: var(--text-muted);
     border-radius: 8px;
     padding: 10px 18px;
@@ -471,41 +413,31 @@
     transition: border-color 0.2s, color 0.2s;
   }
 
-  .reset-btn:hover {
-    border-color: var(--text-muted);
-    color: var(--text);
-  }
+  .reset-btn:hover { border-color: var(--accent); color: var(--accent); }
 
-  /* ── ANIMATIONS ── */
   @keyframes fadeUp {
     from { opacity: 0; transform: translateY(12px); }
     to   { opacity: 1; transform: translateY(0); }
   }
 
-  @keyframes spin {
-    to { transform: rotate(360deg); }
-  }
+  @keyframes spin { to { transform: rotate(360deg); } }
 
-  /* ── RESPONSIVE ── */
   @media (max-width: 500px) {
     .steps-bar { flex-direction: column; }
-    .step-item { border-right: none; border-bottom: 1px solid var(--border); }
+    .step-item { border-right: none; border-bottom: 1.5px solid var(--border); }
     .step-item:last-child { border-bottom: none; }
-    .score-grid { font-size: 12px; }
   }
 </style>
 </head>
 <body>
 <div class="wrap">
 
-  <!-- HEADER -->
   <div class="header">
     <div class="eyebrow">Managing Organizational Behavior</div>
     <h1>Prompting Assignment<br><em>Self-Feedback</em></h1>
     <p class="header-sub">Paste your full chat log below to receive an estimated score and directional feedback based on the assignment rubric.</p>
   </div>
 
-  <!-- STEPS -->
   <div class="steps-bar" id="stepsBar">
     <div class="step-item active" id="step1">
       <div class="step-num">1</div>
@@ -521,7 +453,6 @@
     </div>
   </div>
 
-  <!-- FORM -->
   <div class="section" id="formSection">
     <div class="section-label">Your chat log</div>
     <div class="textarea-wrap">
@@ -563,10 +494,8 @@ Do not paste summaries or AI-only outputs."
     </button>
   </div>
 
-  <!-- ERROR -->
   <div class="error-box" id="errorBox"></div>
 
-  <!-- RESULT -->
   <div id="result">
     <div class="result-header">
       <div class="result-title">Your Feedback</div>
@@ -598,7 +527,6 @@ Do not paste summaries or AI-only outputs."
 
   <hr class="divider">
 
-  <!-- SCORE REFERENCE -->
   <div class="score-ref">
     <div class="score-ref-title">Score reference</div>
     <div class="score-grid">
@@ -666,7 +594,6 @@ Do not paste summaries or AI-only outputs."
     const chatLog = textarea.value.trim();
     if (chatLog.length < 100) return;
 
-    // UI: loading state
     submitBtn.classList.add('loading');
     submitBtn.disabled = true;
     submitBtn.querySelector('.btn-text').textContent = 'Analyzing…';
@@ -699,15 +626,12 @@ Do not paste summaries or AI-only outputs."
   }
 
   function parseFeedback(text) {
-    // Extract score
     const scoreMatch = text.match(/Estimated Score:\s*([\d.]+)/i);
     const score = scoreMatch ? scoreMatch[1] : '—';
 
-    // Extract "Why this score" section
     const whyMatch = text.match(/Why this score:\s*([\s\S]*?)(?=To reach the next level:|$)/i);
     const why = whyMatch ? whyMatch[1].trim() : '';
 
-    // Extract "To reach the next level" section
     const nextMatch = text.match(/To reach the next level:\s*([\s\S]*?)$/i);
     const next = nextMatch ? nextMatch[1].trim() : '';
 
@@ -715,13 +639,11 @@ Do not paste summaries or AI-only outputs."
     document.getElementById('whyText').textContent = why;
     document.getElementById('nextText').textContent = next;
 
-    // Show result, hide form
     document.getElementById('formSection').style.display = 'none';
     document.getElementById('btnWrap').style.display = 'none';
     document.getElementById('result').classList.add('visible');
     setStep(3);
 
-    // Scroll to result
     document.getElementById('result').scrollIntoView({ behavior: 'smooth', block: 'start' });
   }
 
