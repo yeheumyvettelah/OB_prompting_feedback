@@ -1,0 +1,743 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MOB — Assignment Feedback</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=DM+Mono:wght@400;500&family=Geist:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0F0E0C;
+    --surface: #171614;
+    --surface2: #1F1D1A;
+    --border: #2A2724;
+    --border2: #333028;
+    --text: #E8E4DC;
+    --text-muted: #7A7468;
+    --text-dim: #4A4640;
+    --accent: #D4863A;
+    --accent-dim: #2A1E0F;
+    --accent-mid: #8A5520;
+    --green: #4CAF7D;
+    --green-dim: #0F2018;
+    --red: #E05252;
+    --red-dim: #200F0F;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: 'Geist', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    font-size: 15px;
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* ── GRAIN OVERLAY ── */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+    pointer-events: none;
+    z-index: 0;
+    opacity: 0.6;
+  }
+
+  .wrap {
+    position: relative;
+    z-index: 1;
+    max-width: 720px;
+    margin: 0 auto;
+    padding: 64px 24px 120px;
+  }
+
+  /* ── HEADER ── */
+  .header {
+    margin-bottom: 56px;
+    animation: fadeUp 0.6s ease both;
+  }
+
+  .eyebrow {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 16px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .eyebrow::before {
+    content: '';
+    display: block;
+    width: 24px;
+    height: 1px;
+    background: var(--accent);
+    opacity: 0.6;
+  }
+
+  h1 {
+    font-family: 'Instrument Serif', serif;
+    font-size: clamp(2.2rem, 6vw, 3.4rem);
+    line-height: 1.1;
+    letter-spacing: -0.01em;
+    color: var(--text);
+    margin-bottom: 14px;
+  }
+
+  h1 em {
+    font-style: italic;
+    color: var(--accent);
+  }
+
+  .header-sub {
+    color: var(--text-muted);
+    font-size: 14px;
+    font-weight: 300;
+    max-width: 480px;
+    line-height: 1.7;
+  }
+
+  /* ── STEPS BAR ── */
+  .steps-bar {
+    display: flex;
+    gap: 0;
+    margin-bottom: 40px;
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    overflow: hidden;
+    animation: fadeUp 0.6s 0.1s ease both;
+  }
+
+  .step-item {
+    flex: 1;
+    padding: 14px 16px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 12px;
+    color: var(--text-dim);
+    border-right: 1px solid var(--border);
+    transition: color 0.3s;
+    background: var(--surface);
+  }
+
+  .step-item:last-child { border-right: none; }
+
+  .step-item.active { color: var(--text); background: var(--surface2); }
+  .step-item.done { color: var(--green); }
+
+  .step-num {
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    border: 1px solid currentColor;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    flex-shrink: 0;
+    transition: all 0.3s;
+  }
+
+  .step-item.done .step-num {
+    background: var(--green);
+    border-color: var(--green);
+    color: #000;
+  }
+
+  .step-label { font-weight: 500; }
+
+  /* ── SECTION ── */
+  .section {
+    margin-bottom: 32px;
+    animation: fadeUp 0.6s 0.15s ease both;
+  }
+
+  .section-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--text-dim);
+    margin-bottom: 10px;
+  }
+
+  /* ── TEXTAREA ── */
+  .textarea-wrap {
+    position: relative;
+  }
+
+  textarea {
+    width: 100%;
+    min-height: 280px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    color: var(--text);
+    font-family: 'Geist', sans-serif;
+    font-size: 13.5px;
+    line-height: 1.7;
+    padding: 18px 20px;
+    resize: vertical;
+    outline: none;
+    transition: border-color 0.2s, box-shadow 0.2s;
+  }
+
+  textarea::placeholder { color: var(--text-dim); }
+
+  textarea:focus {
+    border-color: var(--accent-mid);
+    box-shadow: 0 0 0 3px rgba(212, 134, 58, 0.08);
+  }
+
+  .char-count {
+    position: absolute;
+    bottom: 12px;
+    right: 14px;
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    color: var(--text-dim);
+    pointer-events: none;
+  }
+
+  /* ── INFO STRIP ── */
+  .info-strip {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+    margin-top: 10px;
+  }
+
+  .info-pill {
+    font-size: 11.5px;
+    color: var(--text-muted);
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    padding: 4px 12px;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+  }
+
+  .info-pill svg { opacity: 0.5; }
+
+  /* ── SUBMIT BUTTON ── */
+  .btn-wrap {
+    margin-top: 24px;
+    animation: fadeUp 0.6s 0.2s ease both;
+  }
+
+  button[type="submit"] {
+    width: 100%;
+    padding: 16px 24px;
+    background: var(--accent);
+    color: #0F0E0C;
+    border: none;
+    border-radius: 10px;
+    font-family: 'Geist', sans-serif;
+    font-size: 15px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: opacity 0.2s, transform 0.15s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    letter-spacing: 0.01em;
+  }
+
+  button[type="submit"]:hover:not(:disabled) {
+    opacity: 0.9;
+    transform: translateY(-1px);
+  }
+
+  button[type="submit"]:disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+    transform: none;
+  }
+
+  .spinner {
+    width: 16px;
+    height: 16px;
+    border: 2px solid rgba(0,0,0,0.2);
+    border-top-color: #000;
+    border-radius: 50%;
+    animation: spin 0.7s linear infinite;
+    display: none;
+  }
+
+  button[type="submit"].loading .spinner { display: block; }
+  button[type="submit"].loading .btn-text { opacity: 0.7; }
+
+  /* ── RESULT ── */
+  #result {
+    margin-top: 40px;
+    display: none;
+    animation: fadeUp 0.5s ease both;
+  }
+
+  #result.visible { display: block; }
+
+  .result-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 20px;
+  }
+
+  .result-title {
+    font-family: 'Instrument Serif', serif;
+    font-size: 1.5rem;
+    color: var(--text);
+  }
+
+  .score-badge {
+    display: flex;
+    align-items: baseline;
+    gap: 3px;
+  }
+
+  .score-num {
+    font-family: 'Instrument Serif', serif;
+    font-size: 3rem;
+    line-height: 1;
+    color: var(--accent);
+  }
+
+  .score-denom {
+    font-family: 'DM Mono', monospace;
+    font-size: 13px;
+    color: var(--text-muted);
+  }
+
+  .result-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    overflow: hidden;
+  }
+
+  .result-block {
+    padding: 22px 24px;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .result-block:last-child { border-bottom: none; }
+
+  .result-block-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    margin-bottom: 10px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .result-block-label.why { color: var(--text-muted); }
+  .result-block-label.next { color: var(--green); }
+
+  .dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: currentColor;
+    flex-shrink: 0;
+  }
+
+  .result-block p {
+    font-size: 14.5px;
+    line-height: 1.75;
+    color: var(--text);
+  }
+
+  /* ── ERROR ── */
+  .error-box {
+    background: var(--red-dim);
+    border: 1px solid var(--red);
+    border-radius: 10px;
+    padding: 16px 20px;
+    font-size: 13.5px;
+    color: var(--red);
+    margin-top: 16px;
+    display: none;
+  }
+
+  .error-box.visible { display: block; }
+
+  /* ── DIVIDER ── */
+  .divider {
+    border: none;
+    border-top: 1px solid var(--border);
+    margin: 40px 0;
+  }
+
+  /* ── SCORE TABLE ── */
+  .score-ref {
+    animation: fadeUp 0.6s 0.25s ease both;
+  }
+
+  .score-ref-title {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--text-dim);
+    margin-bottom: 12px;
+  }
+
+  .score-grid {
+    display: grid;
+    gap: 1px;
+    background: var(--border);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    overflow: hidden;
+  }
+
+  .score-row {
+    display: grid;
+    grid-template-columns: 72px 1fr 80px;
+    background: var(--surface);
+    transition: background 0.15s;
+  }
+
+  .score-row:hover { background: var(--surface2); }
+
+  .score-row.header { background: var(--surface2); }
+
+  .score-cell {
+    padding: 10px 14px;
+    font-size: 12.5px;
+    border-right: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+  }
+
+  .score-cell:last-child { border-right: none; }
+
+  .score-row.header .score-cell {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--text-dim);
+  }
+
+  .score-val {
+    font-family: 'Instrument Serif', serif;
+    font-size: 1.1rem;
+    color: var(--accent);
+  }
+
+  .grade-tag {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    padding: 3px 7px;
+    border-radius: 4px;
+    letter-spacing: 0.06em;
+  }
+
+  .grade-b { background: #0F1E2A; color: #4A9ECC; }
+  .grade-a { background: var(--green-dim); color: var(--green); }
+  .grade-x { background: #1A1206; color: var(--accent); }
+
+  /* ── RESET BUTTON ── */
+  .reset-btn {
+    margin-top: 20px;
+    background: transparent;
+    border: 1px solid var(--border2);
+    color: var(--text-muted);
+    border-radius: 8px;
+    padding: 10px 18px;
+    font-family: 'Geist', sans-serif;
+    font-size: 13px;
+    cursor: pointer;
+    width: 100%;
+    transition: border-color 0.2s, color 0.2s;
+  }
+
+  .reset-btn:hover {
+    border-color: var(--text-muted);
+    color: var(--text);
+  }
+
+  /* ── ANIMATIONS ── */
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(12px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  @keyframes spin {
+    to { transform: rotate(360deg); }
+  }
+
+  /* ── RESPONSIVE ── */
+  @media (max-width: 500px) {
+    .steps-bar { flex-direction: column; }
+    .step-item { border-right: none; border-bottom: 1px solid var(--border); }
+    .step-item:last-child { border-bottom: none; }
+    .score-grid { font-size: 12px; }
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <!-- HEADER -->
+  <div class="header">
+    <div class="eyebrow">Managing Organizational Behavior</div>
+    <h1>Prompting Assignment<br><em>Self-Feedback</em></h1>
+    <p class="header-sub">Paste your full chat log below to receive an estimated score and directional feedback based on the assignment rubric.</p>
+  </div>
+
+  <!-- STEPS -->
+  <div class="steps-bar" id="stepsBar">
+    <div class="step-item active" id="step1">
+      <div class="step-num">1</div>
+      <span class="step-label">Paste chat log</span>
+    </div>
+    <div class="step-item" id="step2">
+      <div class="step-num">2</div>
+      <span class="step-label">Get feedback</span>
+    </div>
+    <div class="step-item" id="step3">
+      <div class="step-num">3</div>
+      <span class="step-label">Review & improve</span>
+    </div>
+  </div>
+
+  <!-- FORM -->
+  <div class="section" id="formSection">
+    <div class="section-label">Your chat log</div>
+    <div class="textarea-wrap">
+      <textarea
+        id="chatLog"
+        placeholder="Paste the full question-and-answer conversation here.
+
+Make sure to include:
+• Your questions (not just the AI's responses)
+• The complete back-and-forth, from start to finish
+• All sessions combined if you had multiple
+
+Do not paste summaries or AI-only outputs."
+        oninput="updateCharCount(this)"
+      ></textarea>
+      <div class="char-count" id="charCount">0 chars</div>
+    </div>
+
+    <div class="info-strip">
+      <div class="info-pill">
+        <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+        Submit in English
+      </div>
+      <div class="info-pill">
+        <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+        Include full Q&amp;A, not just AI answers
+      </div>
+      <div class="info-pill">
+        <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><line x1="9" y1="9" x2="15" y2="15"/><line x1="15" y1="9" x2="9" y2="15"/></svg>
+        No summaries
+      </div>
+    </div>
+  </div>
+
+  <div class="btn-wrap" id="btnWrap">
+    <button type="submit" id="submitBtn" onclick="submitFeedback()" disabled>
+      <div class="spinner"></div>
+      <span class="btn-text">Get Feedback</span>
+    </button>
+  </div>
+
+  <!-- ERROR -->
+  <div class="error-box" id="errorBox"></div>
+
+  <!-- RESULT -->
+  <div id="result">
+    <div class="result-header">
+      <div class="result-title">Your Feedback</div>
+      <div class="score-badge">
+        <div class="score-num" id="scoreNum">—</div>
+        <div class="score-denom">/ 10</div>
+      </div>
+    </div>
+
+    <div class="result-card">
+      <div class="result-block">
+        <div class="result-block-label why">
+          <div class="dot"></div>
+          Why this score
+        </div>
+        <p id="whyText"></p>
+      </div>
+      <div class="result-block">
+        <div class="result-block-label next">
+          <div class="dot"></div>
+          To reach the next level
+        </div>
+        <p id="nextText"></p>
+      </div>
+    </div>
+
+    <button class="reset-btn" onclick="resetForm()">← Try again with a different submission</button>
+  </div>
+
+  <hr class="divider">
+
+  <!-- SCORE REFERENCE -->
+  <div class="score-ref">
+    <div class="score-ref-title">Score reference</div>
+    <div class="score-grid">
+      <div class="score-row header">
+        <div class="score-cell">Score</div>
+        <div class="score-cell">Description</div>
+        <div class="score-cell">Grade</div>
+      </div>
+      <div class="score-row">
+        <div class="score-cell"><span class="score-val">≤ 4.5</span></div>
+        <div class="score-cell">Basic purpose or guidelines not understood</div>
+        <div class="score-cell">—</div>
+      </div>
+      <div class="score-row">
+        <div class="score-cell"><span class="score-val">5</span></div>
+        <div class="score-cell">Understood purpose; reviewed course materials with AI</div>
+        <div class="score-cell"><span class="grade-tag grade-b">B range</span></div>
+      </div>
+      <div class="score-row">
+        <div class="score-cell"><span class="score-val">6</span></div>
+        <div class="score-cell">Attempted to expand knowledge beyond course content</div>
+        <div class="score-cell"><span class="grade-tag grade-b">B range</span></div>
+      </div>
+      <div class="score-row">
+        <div class="score-cell"><span class="score-val">7</span></div>
+        <div class="score-cell">Solid understanding; applied to more advanced thinking</div>
+        <div class="score-cell"><span class="grade-tag grade-a">A range</span></div>
+      </div>
+      <div class="score-row">
+        <div class="score-cell"><span class="score-val">8</span></div>
+        <div class="score-cell">Analyzed real-world cases; proposed solutions with AI</div>
+        <div class="score-cell"><span class="grade-tag grade-a">A range</span></div>
+      </div>
+      <div class="score-row">
+        <div class="score-cell"><span class="score-val">9–10</span></div>
+        <div class="score-cell">Instructor-level (or beyond) rigor and original insight</div>
+        <div class="score-cell"><span class="grade-tag grade-x">Expert</span></div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<script>
+  const textarea = document.getElementById('chatLog');
+  const submitBtn = document.getElementById('submitBtn');
+  const errorBox = document.getElementById('errorBox');
+
+  function updateCharCount(el) {
+    const len = el.value.length;
+    document.getElementById('charCount').textContent = len.toLocaleString() + ' chars';
+    submitBtn.disabled = len < 100;
+  }
+
+  function setStep(n) {
+    ['step1','step2','step3'].forEach((id, i) => {
+      const el = document.getElementById(id);
+      el.className = 'step-item';
+      if (i + 1 < n) el.classList.add('done');
+      else if (i + 1 === n) el.classList.add('active');
+    });
+  }
+
+  async function submitFeedback() {
+    const chatLog = textarea.value.trim();
+    if (chatLog.length < 100) return;
+
+    // UI: loading state
+    submitBtn.classList.add('loading');
+    submitBtn.disabled = true;
+    submitBtn.querySelector('.btn-text').textContent = 'Analyzing…';
+    errorBox.classList.remove('visible');
+    setStep(2);
+
+    try {
+      const res = await fetch('/api/feedback', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ chatLog }),
+      });
+
+      const data = await res.json();
+
+      if (!res.ok || !data.feedback) {
+        throw new Error(data.error || 'Something went wrong. Please try again.');
+      }
+
+      parseFeedback(data.feedback);
+
+    } catch (err) {
+      errorBox.textContent = err.message;
+      errorBox.classList.add('visible');
+      submitBtn.classList.remove('loading');
+      submitBtn.disabled = false;
+      submitBtn.querySelector('.btn-text').textContent = 'Get Feedback';
+      setStep(1);
+    }
+  }
+
+  function parseFeedback(text) {
+    // Extract score
+    const scoreMatch = text.match(/Estimated Score:\s*([\d.]+)/i);
+    const score = scoreMatch ? scoreMatch[1] : '—';
+
+    // Extract "Why this score" section
+    const whyMatch = text.match(/Why this score:\s*([\s\S]*?)(?=To reach the next level:|$)/i);
+    const why = whyMatch ? whyMatch[1].trim() : '';
+
+    // Extract "To reach the next level" section
+    const nextMatch = text.match(/To reach the next level:\s*([\s\S]*?)$/i);
+    const next = nextMatch ? nextMatch[1].trim() : '';
+
+    document.getElementById('scoreNum').textContent = score;
+    document.getElementById('whyText').textContent = why;
+    document.getElementById('nextText').textContent = next;
+
+    // Show result, hide form
+    document.getElementById('formSection').style.display = 'none';
+    document.getElementById('btnWrap').style.display = 'none';
+    document.getElementById('result').classList.add('visible');
+    setStep(3);
+
+    // Scroll to result
+    document.getElementById('result').scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }
+
+  function resetForm() {
+    textarea.value = '';
+    document.getElementById('charCount').textContent = '0 chars';
+    submitBtn.classList.remove('loading');
+    submitBtn.disabled = true;
+    submitBtn.querySelector('.btn-text').textContent = 'Get Feedback';
+    document.getElementById('result').classList.remove('visible');
+    document.getElementById('formSection').style.display = '';
+    document.getElementById('btnWrap').style.display = '';
+    errorBox.classList.remove('visible');
+    setStep(1);
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+</script>
+</body>
+</html>
