@@ -53,6 +53,6 @@ Why this score:
 To reach the next level:
 [2–4 sentences of directional guidance. Do NOT give example prompts. Describe the type of thinking or engagement they should aim for — e.g., whether they need to share more of their own reasoning, apply concepts to real cases, or push back on AI responses.]
 
-Write in English. Be encouraging but honest. Do not inflate the score.`;
+Detect the language of the student's chat log and write your feedback in the same language. If the chat log is in Korean, write the feedback entirely in Korean. If it is in English, write entirely in English. Be encouraging but honest. Do not inflate the score.`;
 
 module.exports = { SYSTEM_PROMPT };
