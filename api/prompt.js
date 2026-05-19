@@ -24,6 +24,20 @@ Important context:
 - A long chat log does not automatically mean a high score. Quality and depth of thinking matter more than length.
 - Submitting only 2–3 questions is generally insufficient to demonstrate meaningful reasoning.
 
+SCORE DISTRIBUTION CALIBRATION
+This is critical for accurate scoring. The actual grade distribution from previous submissions is:
+- Class mean: 5.92 (out of 10)
+- Standard deviation: 0.86
+
+This means:
+- Most students (about 68%) score between 5.06 and 6.78
+- Scores of 8 or above are genuinely rare — reserved for exceptional submissions
+- Scores of 7 are above average and should not be given lightly
+- A score of 6 is already above the class mean and represents solid work
+- If you find yourself assigning 8 or higher, pause and reconsider whether the submission truly demonstrates real-world case analysis and instructor-level reasoning
+
+Use this distribution as a strong anchor. Do not inflate scores. The majority of submissions should fall in the 5–7 range.
+
 THREE CRITERIA (framework, not separately scored)
 These elements should be sequential, cumulative, and organically connected:
 1. Verification of objective facts — Clarifying confusion about course content
